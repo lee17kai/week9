@@ -84,19 +84,41 @@ firebase.auth().onAuthStateChanged(async function(user) {
       `)
 
       // 🔥 Practice - comments
-      // get a reference to the newly created post comment button
-      // event listener for the post comment button
-        // ignore the default behavior
-        // get a reference to the newly created comment input
-        // get the body of the comment
-        // Build the URL for our posts API
-        // Fetch the url, wait for a response, store the response in memory
-        // refresh the page
+      // get a reference to the newly created post comment button. this is the same id we just gave it above
+      let postCommentButton = document.querySelector(`#post-comment-button-${postId}`)
 
+      // event listener for the post comment button. listen for the user clicking it
+      postCommentButton.addEventListener(`click`, async function(event)) {
+        console.log(`Post comment button clicked!`) //see if it works
+        // ignore the default behavior
+        event.preventDefault()
+
+        // get a reference to the newly created comment input
+        let commentInput = document.querySelector(`#comment-${postId}`)
+
+        // get the body of the comment
+        let commentBody = commentInput.value
+
+        // Build the URL for our posts API. to see what api looks like go to create_comment.js. need body, postId, userName to create a comment.
+        let url = `/.netlify/functions/create_comment?postId=${postId}&userName=${user.displayName}&body=${commentBody}`
+
+        // Fetch the url, wait for a response, store the response in memory. 
+        let response = fetch(url)
+
+        // refresh the page
+        location.reload()
+      })
       // 🔥 Lab - like button
+      let likeButton = document.querySelector(`#like-button-${postId}`)
+
       // - Create an event listener for the like button of each post
-      // - Create and fetch a "like" lambda function (in /netlify/functions/create_like.js)
-      // - Refresh the page when done fetching the lambda function
+      likeButton.addEventListener(`click`, async function(event){
+        event.preventDefault()
+
+        // - Create and fetch a "like" lambda function (in /netlify/functions/create_like.js)
+        let likeUrl = `/netlify/functions/create_like.js?postId=${postId}&userId=${user.uid}`
+        // - Refresh the page when done fetching the lambda function
+      })
     }
 
     // get a reference to the "Post" button
